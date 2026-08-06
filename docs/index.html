@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AetherScope — Scope that keeps receipts</title>
+    <meta
+      name="description"
+      content="Scope enforcement for authorized security testing. Parse scope rules, validate targets, filter lists."
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2300e063'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' font-weight='700' text-anchor='middle' fill='%23201d1d'%3EA%3C/text%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav-inner">
+        <span class="logo">aetherscope<span class="logo-dot">.</span></span>
+        <div class="nav-links">
+          <a href="#install">Install</a>
+          <a href="#features">Features</a>
+          <a href="#usage">Usage</a>
+          <a href="#report">Report</a>
+        </div>
+        <a
+          class="badge"
+          href="https://github.com/Aether-DZ/aetherscope"
+          target="_blank"
+          rel="noopener"
+          >GitHub ↗</a
+        >
+      </div>
+    </nav>
+
+    <header class="hero">
+      <h1 class="hero-title">Scope that <span class="accent">keeps receipts</span>.</h1>
+      <p class="hero-sub">
+        Know exactly what you are authorized to test. Aetherscope reads a scope
+        file and answers one question about every target: in-scope, out-of-scope,
+        or unknown.
+      </p>
+      <div class="hero-cta">
+        <a class="btn" href="#install">Get started</a>
+        <a class="btn btn-ghost" href="#usage">Read the docs</a>
+      </div>
+
+      <div class="terminal" id="terminal" aria-label="Terminal demo">
+        <div class="terminal-bar">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="terminal-title">aetherscope</span>
+        </div>
+        <pre class="terminal-body" id="terminal-body"><span class="t-prompt">$</span> <span id="typed"></span><span class="cursor"></span></pre>
+      </div>
+    </header>
+
+    <main>
+      <section id="install" class="section">
+        <h2>Install</h2>
+        <div class="code-block">
+          <pre><code>pip install aetherscope</code></pre>
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <h2>Features</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Scope parsing</h3>
+            <p>
+              Exact hosts, wildcard domains, negations, host:port, URL rules
+              with scheme and path, IPs, and CIDR ranges. Comments and blank
+              lines ignored.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Negation wins</h3>
+            <p>
+              An <code>out-of-scope</code> rule overrides any inclusion. If a
+              target is explicitly denied, it is denied — no ambiguity.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Pipe friendly</h3>
+            <p>
+              Feed a subdomain list on stdin, keep only in-scope entries on
+              stdout. Composable with anything.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Exit codes</h3>
+            <p>
+              <code>0</code> in-scope, <code>1</code> out-of-scope,
+              <code>2</code> unknown, <code>3</code> error. Script-friendly
+              gatekeeping.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Reports</h3>
+            <p>
+              JSON and Markdown reports with a per-target verdict and the
+              matched rule. Your testing record, versioned.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Zero deps</h3>
+            <p>
+              Pure standard library, Python 3.8+. Install anywhere, run
+              anywhere.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="usage" class="section">
+        <h2>Usage</h2>
+        <div class="code-block">
+          <pre><code><span class="c"># classify targets</span>
+aetherscope -s scope.txt check api.example.com admin.example.com
+
+<span class="c"># keep only in-scope targets from a list</span>
+cat recon_subs.txt | aetherscope -s scope.txt filter &gt; in_scope.txt
+
+<span class="c"># show parsed rules</span>
+aetherscope -s scope.txt parse
+
+<span class="c"># build a markdown report</span>
+aetherscope -s scope.txt report --format markdown -o report.md</code></pre>
+        </div>
+      </section>
+
+      <section id="report" class="section">
+        <h2>Example report</h2>
+        <div class="code-block">
+          <pre><code><span class="c">$</span> cat scope.txt
+<span class="c-mode">*.example.com</span>
+<span class="c-err">!secret.example.com</span>
+<span class="c-mode">10.0.0.0/24</span>
+<span class="t-prompt">$</span> printf 'api.example.com\nexternal.net\n' | aetherscope -s scope.txt filter
+api.example.com</code></pre>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>MIT Licensed · © 2026 Aether-DZ</span>
+        <a href="https://github.com/Aether-DZ/aetherscope" target="_blank" rel="noopener">
+          Source on GitHub
+        </a>
+      </footer>
+    </main>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
